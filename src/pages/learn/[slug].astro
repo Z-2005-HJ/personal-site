@@ -1,0 +1,29 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+	const logs = await getCollection('daily');
+	return logs.map((entry) => ({
+		params: { slug: entry.id },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const heading = entry.data.title ?? entry.data.date;
+---
+
+<Base title={`${heading} · 学习日志`}>
+	<div class="back-row">
+		<a href="/learn">← 全部日志</a>
+		<span class="muted"> · </span>
+		<a href="/">首页</a>
+	</div>
+	<h1 class="page-title">{heading}</h1>
+	<p class="muted">{entry.data.date}</p>
+	<article class="prose" style="margin-top:1rem;">
+		<Content />
+	</article>
+</Base>

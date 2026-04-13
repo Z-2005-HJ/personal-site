@@ -1,0 +1,111 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import '../styles/global.css';
+
+const resumeEntry = await getEntry('resume', 'index');
+const summary =
+	resumeEntry?.data.summary ??
+	'请在 src/content/resume/index.md 的 frontmatter 中填写 summary 字段。';
+const displayName = resumeEntry?.data.name ?? '你的名字';
+
+const allProjects = await getCollection('projects');
+const featured = [...allProjects]
+	.filter((p) => p.data.featured)
+	.sort(
+		(a, b) =>
+			a.data.order - b.data.order ||
+			a.data.title.localeCompare(b.data.title, 'zh-CN'),
+	);
+const other = [...allProjects]
+	.filter((p) => !p.data.featured)
+	.sort(
+		(a, b) =>
+			a.data.order - b.data.order ||
+			a.data.title.localeCompare(b.data.title, 'zh-CN'),
+	);
+const projectPreviews = [...featured, ...other].slice(0, 2);
+
+const allDaily = await getCollection('daily');
+allDaily.sort((a, b) => b.data.date.localeCompare(a.data.date));
+const dailyPreviews = allDaily.slice(0, 2);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<title>个人主页</title>
+	</head>
+	<body class="home-locked">
+		<div class="home-root">
+			<header class="home-top">
+				<img
+					class="home-avatar"
+					src="/avatar.svg"
+					width="96"
+					height="96"
+					alt="头像"
+				/>
+				<div class="home-resume-block">
+					<h1 class="home-name">{displayName}</h1>
+					<p class="home-summary">{summary}</p>
+					<a class="home-resume-link" href="/resume">查看完整简历 →</a>
+				</div>
+			</header>
+
+			<div class="home-columns">
+				<section class="home-panel" aria-label="作品集预览">
+					<div class="home-panel-head">
+						<h2 class="home-panel-title">作品集</h2>
+						<a class="home-panel-more" href="/portfolio">查看全部</a>
+					</div>
+					<div class="home-mini-list">
+						{
+							projectPreviews.length === 0 ? (
+								<p class="muted" style="margin:0;font-size:0.8rem;">
+									在 src/content/projects/ 下添加 Markdown 即可。
+								</p>
+							) : (
+								projectPreviews.map((p) => (
+									<a class="home-mini-item" href={`/portfolio/${p.id}`}>
+										<p class="home-mini-item-title">{p.data.title}</p>
+										<p class="home-mini-item-sub">{p.data.description}</p>
+									</a>
+								))
+							)
+						}
+					</div>
+				</section>
+
+				<section class="home-panel" aria-label="每日学习预览">
+					<div class="home-panel-head">
+						<h2 class="home-panel-title">每日学习</h2>
+						<a class="home-panel-more" href="/learn">查看全部</a>
+					</div>
+					<div class="home-mini-list">
+						{
+							dailyPreviews.length === 0 ? (
+								<p class="muted" style="margin:0;font-size:0.8rem;">
+									在 src/content/daily/ 下按日期添加 Markdown。
+								</p>
+							) : (
+								dailyPreviews.map((d) => (
+									<a class="home-mini-item" href={`/learn/${d.id}`}>
+										<p class="home-mini-item-title">
+											{d.data.title ?? d.data.date}
+										</p>
+										<p class="home-mini-item-sub">{d.data.date}</p>
+									</a>
+								))
+							)
+						}
+					</div>
+				</section>
+			</div>
+		</div>
+	</body>
+</html>

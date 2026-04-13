@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const logs = await getCollection('daily');
+logs.sort((a, b) => b.data.date.localeCompare(a.data.date));
+---
+
+<Base title="每日学习">
+	<div class="back-row">
+		<a href="/">← 返回首页</a>
+	</div>
+	<h1 class="page-title">每日学习</h1>
+	<p class="muted">按日期浏览日志；正文支持图片与代码块（Markdown）。</p>
+	<div class="card-list" style="margin-top:1rem;">
+		{
+			logs.map((log) => (
+				<a class="card" href={`/learn/${log.id}`}>
+					<h2 class="card-title">{log.data.title ?? log.data.date}</h2>
+					<p class="card-desc">{log.data.date}</p>
+				</a>
+			))
+		}
+	</div>
+</Base>
