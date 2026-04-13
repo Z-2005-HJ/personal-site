@@ -12,13 +12,14 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+const base = import.meta.env.BASE_URL;
 ---
 
 <Base title={entry.data.title} description={entry.data.description}>
 	<div class="back-row">
-		<a href="/portfolio">← 作品集列表</a>
+		<a href={`${base}portfolio`}>← 作品集列表</a>
 		<span class="muted"> · </span>
-		<a href="/">首页</a>
+		<a href={base}>首页</a>
 	</div>
 	<h1 class="page-title">{entry.data.title}</h1>
 	<p class="muted">

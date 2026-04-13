@@ -28,14 +28,18 @@ const projectPreviews = [...featured, ...other].slice(0, 2);
 const allDaily = await getCollection('daily');
 allDaily.sort((a, b) => b.data.date.localeCompare(a.data.date));
 const dailyPreviews = allDaily.slice(0, 2);
+
+const base = import.meta.env.BASE_URL;
+/** 头像文件放在 public/ 下，此处只写文件名（不要加 public/ 或 @） */
+const avatarSrc = `${base}image.jpg`;
 ---
 
 <!doctype html>
 <html lang="zh-CN">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+		<link rel="icon" href={`${base}favicon.ico`} />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
 		<title>个人主页</title>
@@ -45,7 +49,7 @@ const dailyPreviews = allDaily.slice(0, 2);
 			<header class="home-top">
 				<img
 					class="home-avatar"
-					src="/avatar.svg"
+					src={avatarSrc}
 					width="96"
 					height="96"
 					alt="头像"
@@ -53,7 +57,7 @@ const dailyPreviews = allDaily.slice(0, 2);
 				<div class="home-resume-block">
 					<h1 class="home-name">{displayName}</h1>
 					<p class="home-summary">{summary}</p>
-					<a class="home-resume-link" href="/resume">查看完整简历 →</a>
+					<a class="home-resume-link" href={`${base}resume`}>查看完整简历 →</a>
 				</div>
 			</header>
 
@@ -61,7 +65,7 @@ const dailyPreviews = allDaily.slice(0, 2);
 				<section class="home-panel" aria-label="作品集预览">
 					<div class="home-panel-head">
 						<h2 class="home-panel-title">作品集</h2>
-						<a class="home-panel-more" href="/portfolio">查看全部</a>
+						<a class="home-panel-more" href={`${base}portfolio`}>查看全部</a>
 					</div>
 					<div class="home-mini-list">
 						{
@@ -71,7 +75,7 @@ const dailyPreviews = allDaily.slice(0, 2);
 								</p>
 							) : (
 								projectPreviews.map((p) => (
-									<a class="home-mini-item" href={`/portfolio/${p.id}`}>
+									<a class="home-mini-item" href={`${base}portfolio/${p.id}`}>
 										<p class="home-mini-item-title">{p.data.title}</p>
 										<p class="home-mini-item-sub">{p.data.description}</p>
 									</a>
@@ -84,7 +88,7 @@ const dailyPreviews = allDaily.slice(0, 2);
 				<section class="home-panel" aria-label="每日学习预览">
 					<div class="home-panel-head">
 						<h2 class="home-panel-title">每日学习</h2>
-						<a class="home-panel-more" href="/learn">查看全部</a>
+						<a class="home-panel-more" href={`${base}learn`}>查看全部</a>
 					</div>
 					<div class="home-mini-list">
 						{
@@ -94,7 +98,7 @@ const dailyPreviews = allDaily.slice(0, 2);
 								</p>
 							) : (
 								dailyPreviews.map((d) => (
-									<a class="home-mini-item" href={`/learn/${d.id}`}>
+									<a class="home-mini-item" href={`${base}learn/${d.id}`}>
 										<p class="home-mini-item-title">
 											{d.data.title ?? d.data.date}
 										</p>

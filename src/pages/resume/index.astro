@@ -12,7 +12,7 @@ const { Content } = await render(entry);
 
 <Base title="完整简历">
 	<div class="back-row">
-		<a href="/">← 返回首页</a>
+		<a href={import.meta.env.BASE_URL}>← 返回首页</a>
 	</div>
 	<h1 class="page-title">简历</h1>
 	<p class="muted">编辑 <code>src/content/resume/index.md</code> 更新此页。</p>
