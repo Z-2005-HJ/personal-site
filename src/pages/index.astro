@@ -30,8 +30,10 @@ allDaily.sort((a, b) => b.data.date.localeCompare(a.data.date));
 const dailyPreviews = allDaily.slice(0, 2);
 
 const base = import.meta.env.BASE_URL;
-/** 头像文件放在 public/ 下，此处只写文件名（不要加 public/ 或 @） */
-const avatarSrc = `${base}image.jpg`;
+/** 头像在 public/image.jpg；生产环境用绝对地址，避免部分手机应用内浏览器解析错路径 */
+const avatarSrc = Astro.site
+	? new URL('image.jpg', new URL(base, Astro.site)).href
+	: `${base}image.jpg`;
 ---
 
 <!doctype html>
@@ -53,6 +55,9 @@ const avatarSrc = `${base}image.jpg`;
 					width="96"
 					height="96"
 					alt="头像"
+					loading="eager"
+					decoding="async"
+					fetchpriority="high"
 				/>
 				<div class="home-resume-block">
 					<h1 class="home-name">{displayName}</h1>
