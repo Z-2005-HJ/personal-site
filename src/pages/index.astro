@@ -49,16 +49,25 @@ const avatarSrc = Astro.site
 	<body class="home-locked">
 		<div class="home-root">
 			<header class="home-top">
-				<img
-					class="home-avatar"
-					src={avatarSrc}
-					width="96"
-					height="96"
-					alt="头像"
-					loading="eager"
-					decoding="async"
-					fetchpriority="high"
-				/>
+				<a
+					class="home-avatar-link"
+					href={avatarSrc}
+					target="_blank"
+					rel="noopener noreferrer"
+					title="点击查看大图"
+					aria-label="查看头像大图"
+				>
+					<img
+						class="home-avatar"
+						src={avatarSrc}
+						width="144"
+						height="144"
+						alt="头像"
+						loading="eager"
+						decoding="async"
+						fetchpriority="high"
+					/>
+				</a>
 				<div class="home-resume-block">
 					<h1 class="home-name">{displayName}</h1>
 					<p class="home-summary">{summary}</p>
@@ -67,7 +76,7 @@ const avatarSrc = Astro.site
 			</header>
 
 			<div class="home-columns">
-				<section class="home-panel" aria-label="作品集预览">
+				<section class="home-panel home-panel--portfolio" aria-label="作品集预览">
 					<div class="home-panel-head">
 						<h2 class="home-panel-title">作品集</h2>
 						<a class="home-panel-more" href={`${base}portfolio`}>查看全部</a>
@@ -90,7 +99,7 @@ const avatarSrc = Astro.site
 					</div>
 				</section>
 
-				<section class="home-panel" aria-label="每日学习预览">
+				<section class="home-panel home-panel--learn" aria-label="每日学习预览">
 					<div class="home-panel-head">
 						<h2 class="home-panel-title">每日学习</h2>
 						<a class="home-panel-more" href={`${base}learn`}>查看全部</a>
